@@ -35,3 +35,46 @@ jobs:
         
       - name: Print nice message on completion of CI Pipeline.
         run: echo "CI Pipeline part finished successfully "
+
+
+  my_ci_pipeline:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Configure my aws
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id      : ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key : ${{ secrets.AWS_SCRET_ACCESS_KEY }}
+          aws-region            : ${{ env.AWS_REGIONS_NAME }}
+      
+      - name:
+        run: |
+          aws elasticbeanstalk create-application-version \
+          --application-name ${{ env.EB_APPLICATION_NAME  }} \ 
+          --source-bundle S3Bucket="${{ env.EB_PACKAGE_S3_BUCKET_NAME }}",S3Key="${{ nv.EB_PACKAGE_S3_BUCKET_NAME }}" \
+         --version-label "ver-${{ github.sha }}" \
+         --description "CommitSHA-${{ github.sha }}"
+      
+      - name: Deploy our new Applicaion version.
+        run: aws elasticbeanstalk update-environment --environment-name ${{ env.EB_ENVIRONMENT_NAME }} --version-label "ver-${{ github.sha }}"
+      
+     
+      - name: Print nice message on completion of CI Pipeline.
+        run: echo "CD pipeline part finished successfully"
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+
+
+
+
+
