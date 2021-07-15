@@ -37,11 +37,11 @@ jobs:
         run: echo "CI Pipeline part finished successfully "
 
 
-  my_cD_pipeline:
+  my_cd_pipeline:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Configure my awss
+      - name: Configure my aws
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id      : ${{ secrets.AWS_ACCESS_KEY }}
